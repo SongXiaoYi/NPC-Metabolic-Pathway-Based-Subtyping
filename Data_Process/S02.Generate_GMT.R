@@ -45,6 +45,6 @@ gs.exp <- gsva(TCGA,gmt,method = "ssgsea",kcdf = "Poisson", min.sz = 1)
 #DR_score <- gs.exp[190,] - gs.exp[191,]
 setwd('H:\\Reng')
 gs.exp <- as.data.frame(gs.exp)
-write.csv(gs.exp, file = 'Gset_analysis_score.csv', row.names = FALSE)
+write.csv(gs.exp, file = 'Gset_analysis_score.csv')
 
 
