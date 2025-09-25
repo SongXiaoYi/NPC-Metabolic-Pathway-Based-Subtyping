@@ -132,6 +132,8 @@ getMoHeatmap(data          = plotdata,
              height        = 5, # height of each subheatmap
              fig.name      = "COMPREHENSIVE HEATMAP OF ICLUSTERBAYES")
 
+setwd('H:\\Reng')
+write.csv(cmoic$clust.res, file = 'Cluster_num.csv')
 ########################################## Annotated meta new
 setwd('H:\\ZF-IMC-Formal-analysis\\Experiment\\S05.MOVICS_cluster_analysis')
 Meta_data <- read.csv('./Meta_data.csv')
