@@ -100,6 +100,12 @@ cmoic <- getConsensusMOIC(moic.res.list = moic.res.list,
                                distance      = "euclidean",
                                linkage       = "ward.D")    # average
 
+############################################# Silhouette
+getSilhouette(sil      = cmoic$sil, # a sil object returned by getConsensusMOIC()
+              fig.path = getwd(),
+              fig.name = "SILHOUETTE",
+              height   = 4,
+              width    = 3.55)
 ############################################# Plot
 indata <- mo.data
 plotdata <- getStdiz(data       = indata,
@@ -134,30 +140,43 @@ getMoHeatmap(data          = plotdata,
 
 setwd('H:\\Reng')
 write.csv(cmoic$clust.res, file = 'Cluster_num.csv')
-########################################## Annotated meta new
-setwd('H:\\ZF-IMC-Formal-analysis\\Experiment\\S05.MOVICS_cluster_analysis')
-Meta_data <- read.csv('./Meta_data.csv')
-colnames(Meta_data)[1] <- 'Patient_Match'
-filter <- read.csv('./SampleID_filter.csv')
-filter <- filter$Patient
-Meta_data <- Meta_data[Meta_data$Patient_Match %in% filter,]
-rownames(Meta_data) <- Meta_data$Patient_Match
-Meta_data <- Meta_data[rownames(cmoic$clust.res),]
+######################################################
+Combine_clust <-  data.frame( SNF = as.factor(moic.SNF$clust.res[,2]), 
+                              CIMLR = as.factor(moic.CIMLR$clust.res[,2]),
+                              PINSPlus = as.factor(moic.PINSPlus$clust.res[,2]),
+                              NEMO = as.factor(moic.NEMO$clust.res[,2]),
+                              COCA = as.factor(moic.COCA$clust.res[,2]),
+                              MoCluster = as.factor(moic.MoCluster$clust.res[,2]),
+                              LRAcluster = as.factor(moic.LRAcluster$clust.res[,2]),
+                              ConsensusClustering = as.factor(moic.ConsensusClustering$clust.res[,2]),
+                              IntNMF = as.factor(moic.IntNMF$clust.res[,2]),
+                              iClusterBayes = as.factor(moic.iClusterBayes$clust.res[,2]))
 
-Meta_data <- Meta_data[,2:4]
-annCol <- Meta_data
+                              
+                             
+########################################## Annotated meta new
+annCol <- Combine_clust
+
 ################################################
-annColors   <-  list("Treatment" = c("C+R" = "#F8766D", "C" = "#7CAE00", "C+I" = "#00BFC4", "I" = "#C77CFF"),
-                 "Response" = c("R" = "#2DB600FF", "NR" = "#E8C32EFF"),
-                 "Outcome" = c( "PCR" = "#80C1C0", "nMPR" = "#D695FE", "MPR" = "#F0BEA6"))
+annColors   <-  list("SNF" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "CIMLR" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "PINSPlus" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "NEMO" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "COCA" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "MoCluster" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "LRAcluster" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "ConsensusClustering" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "IntNMF" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     "iClusterBayes" = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4")
+                    )
 
 getMoHeatmap(data          = plotdata,
-             row.title     = c("Freq","Density","Districts"),
-             is.binary     = c(F,F,F), # the 4th data is mutation which is binary
-             legend.name   = c("Enrichment","Enrichment","Enrichment"),
+             row.title     = c("",""),
+             is.binary     = c(F,F), # the 4th data is mutation which is binary
+             legend.name   = c("Enrichment","Enrichment"),
              clust.res     = cmoic$clust.res, # cluster results
              clust.dend    = NULL, # no dendrogram
-             show.rownames = c(F,F,F), # specify for each omics data
+             show.rownames = c(F,F), # specify for each omics data
              show.colnames = FALSE, # show no sample names
              annRow        = annRow, # mark selected features
              color         = col.list,
@@ -165,7 +184,7 @@ getMoHeatmap(data          = plotdata,
              annColors     = annColors, # no annotation color
              width         = 10, # width of each subheatmap
              height        = 5, # height of each subheatmap
-             fig.name      = "COMPREHENSIVE HEATMAP OF ICLUSTERBAYES")
+             fig.name      = "COMPREHENSIVE HEATMAP OF ICLUSTERBAYES single clust")
 
 ####################################################################
 ########################################## Annotated meta old
