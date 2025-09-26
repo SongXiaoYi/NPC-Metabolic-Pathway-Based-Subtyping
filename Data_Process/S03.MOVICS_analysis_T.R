@@ -16,6 +16,7 @@ library(tidyr)
 library(reshape2)
 library(limma)
 library(MOVICS)
+library(ComplexHeatmap)
 ########################################################################
 '%!in%' <- Negate('%in%')   #### Not in function
 ############################ Here begin
@@ -141,6 +142,41 @@ getMoHeatmap(data          = plotdata,
 setwd('H:\\Reng')
 write.csv(cmoic$clust.res, file = 'Cluster_num.csv')
 ######################################################
+###################################################### ComplexHeatmap
+ha = HeatmapAnnotation(       SNF = as.factor(moic.SNF$clust.res[,2]), 
+                              CIMLR = as.factor(moic.CIMLR$clust.res[,2]),
+                              PINSPlus = as.factor(moic.PINSPlus$clust.res[,2]),
+                              NEMO = as.factor(moic.NEMO$clust.res[,2]),
+                              COCA = as.factor(moic.COCA$clust.res[,2]),
+                              MoCluster = as.factor(moic.MoCluster$clust.res[,2]),
+                              LRAcluster = as.factor(moic.LRAcluster$clust.res[,2]),
+                              ConsensusClustering = as.factor(moic.ConsensusClustering$clust.res[,2]),
+                              IntNMF = as.factor(moic.IntNMF$clust.res[,2]),
+                              iClusterBayes = as.factor(moic.iClusterBayes$clust.res[,2]),
+                col = list(SNF = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     CIMLR = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     PINSPlus = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     NEMO = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     COCA = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     MoCluster = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     LRAcluster = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     ConsensusClustering = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     IntNMF = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4"),
+                     iClusterBayes = c("1" = "#F8766D", "2" = "#7CAE00", "3" = "#00BFC4")
+    ),
+    simple_anno_size = unit(0.5, "cm")                  
+)
+
+plot(ha)
+
+############################
+setwd('H:\\Reng')
+pdf(file = 'Cluster_annotation.pdf', width = 8.5, height = 4.4)
+plot(ha)
+dev.off()
+
+
+
 Combine_clust <-  data.frame( SNF = as.factor(moic.SNF$clust.res[,2]), 
                               CIMLR = as.factor(moic.CIMLR$clust.res[,2]),
                               PINSPlus = as.factor(moic.PINSPlus$clust.res[,2]),
