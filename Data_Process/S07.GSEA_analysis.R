@@ -39,22 +39,23 @@ setwd('H:\\Reng\\DEG_analysis')
 h.gmt <- msigdbr(species = 'human', category = "H") %>%
             dplyr::select(gs_name, gene_symbol)
 #################################### Cluster 1
-Cluster1_DEG <- fread('./NPC_deseq2_test_result.Cluster1_vs_Others.txt')
+Cluster3_DEG <- fread('./NPC_deseq2_test_result.Cluster3_vs_Others.txt')
 
-DEG <- Cluster1_DEG
+DEG <- Cluster3_DEG
 colnames(DEG)[1] <- 'Gene'
 colnames(DEG)[3] <- 'logFC'
 colnames(DEG)[7] <- 'adj.P.Val'
 ##################################### GSEA
-IR <- DEG[!duplicated(DEG$Gene),c('logFC','adj.P.Val')]
+rownames(DEG) <- DEG$Gene
+IR <- DEG[!duplicated(DEG$Gene),c('Gene','logFC','adj.P.Val')]
 #########################
 library(org.Hs.eg.db)
-gene <- bitr(rownames(IR),     #转换的列是nrDEG的列名
+gene <- bitr(IR$Gene,     #转换的列是nrDEG的列名
              fromType = "SYMBOL",     #需要转换ID类型
              toType =  "ENTREZID",    #转换成的ID类型
              OrgDb = org.Hs.eg.db)    #对应的物种，小鼠的是org.Mm.eg.db
 #让基因名、ENTREZID、logFC对应起来
-gene$logFC <- IR$logFC[match(gene$SYMBOL,rownames(IR))]
+gene$logFC <- IR$logFC[match(gene$SYMBOL,IR$Gene)]
 head(gene)
 geneList=gene$logFC
 names(geneList)=gene$SYMBOL 
@@ -76,19 +77,6 @@ gesa_res <- as.data.frame(egmt@result)
 ###############################################
 #gseaplot2(egmt, "HALLMARK_INFLAMMATORY_RESPONSE", color = "firebrick",
 #            rel_heights=c(1, .2, .6), subplots=1:2)
-############################################### Inflammatory Res
-p1 <- gseaplot2(egmt,#数据
-            "HALLMARK_INFLAMMATORY_RESPONSE",#画哪一列的信号通路
-            #title = "Prion disease",#标题
-            base_size = 15,#字体大小
-            color = "green",#线条的颜色
-            #pvalue_table = TRUE,#加不加p值
-            ES_geom="line",subplots=1:2)#是用线，还是用d点
-
-setwd('G:\\WuXiang\\Experiment\\GSEA')
-pdf(file="./InflammatoryRes.pdf",width= 3.25,height= 2.5)
-p1
-dev.off()
 
 ############################################### Inflammatory Res
 p1 <- gseaplot2(egmt,#数据
@@ -96,11 +84,11 @@ p1 <- gseaplot2(egmt,#数据
             #title = "Prion disease",#标题
             base_size = 15,#字体大小
             color = "green",#线条的颜色
-            #pvalue_table = TRUE,#加不加p值
+            pvalue_table = TRUE,#加不加p值
             ES_geom="line",subplots=1:2)#是用线，还是用d点
 
-setwd('G:\\WuXiang\\Experiment\\GSEA')
-pdf(file="./InflammatoryRes.pdf",width= 3.25,height= 2.5)
+setwd('H:\\Reng\\DEG_analysis')
+pdf(file="./Cluster3_InflammatoryRes.pdf",width= 10,height= 4)
 p1
 dev.off()
 
@@ -110,11 +98,11 @@ p1 <- gseaplot2(egmt,#数据
             #title = "Prion disease",#标题
             base_size = 15,#字体大小
             color = "green",#线条的颜色
-            #pvalue_table = TRUE,#加不加p值
+            pvalue_table = TRUE,#加不加p值
             ES_geom="line",subplots=1:2)#是用线，还是用d点
 
-setwd('G:\\WuXiang\\Experiment\\GSEA')
-pdf(file="./IL6_JAK.pdf",width= 3.25,height= 2.5)
+setwd('H:\\Reng\\DEG_analysis')
+pdf(file="./Cluster3_IL6_JAK.pdf",width= 10,height= 4)
 p1
 dev.off()
 
@@ -124,12 +112,11 @@ p1 <- gseaplot2(egmt,#数据
             #title = "Prion disease",#标题
             base_size = 15,#字体大小
             color = "green",#线条的颜色
-            #pvalue_table = TRUE,#加不加p值
+            pvalue_table = TRUE,#加不加p值
             ES_geom="line",subplots=1:2)#是用线，还是用d点
 
-setwd('G:\\WuXiang\\Experiment\\GSEA')
-pdf(file="./INTERFERON_ALPHA.pdf",width= 3.25,height= 2.5)
-p1
+setwd('H:\\Reng\\DEG_analysis')
+pdf(file="./Cluster3_INTERFERON_ALPHA.pdf",width= 10,height= 4)
 dev.off()
 
 ############################################### HALLMARK_INTERFERON_GAMMA_RESPONSE
@@ -138,11 +125,11 @@ p1 <- gseaplot2(egmt,#数据
             #title = "Prion disease",#标题
             base_size = 15,#字体大小
             color = "green",#线条的颜色
-            #pvalue_table = TRUE,#加不加p值
+            pvalue_table = TRUE,#加不加p值
             ES_geom="line",subplots=1:2)#是用线，还是用d点
 
-setwd('G:\\WuXiang\\Experiment\\GSEA')
-pdf(file="./INTERFERON_GAMMA.pdf",width= 3.25,height= 2.5)
+setwd('H:\\Reng\\DEG_analysis')
+pdf(file="./Cluster3_INTERFERON_GAMMA.pdf",width= 10,height= 4)
 p1
 dev.off()
 
