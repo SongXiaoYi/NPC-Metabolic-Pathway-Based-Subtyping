@@ -14,6 +14,7 @@ library(GSVA)
 library(GSEABase)
 library(limma)
 library(data.table)
+library(DESeq2)
 ##################################################
 
 check_package <- function(package){
@@ -79,36 +80,7 @@ gene.location <- gene.location[gene.location$gene_type == 'protein_coding',]
 pbmc <- pbmc[rownames(pbmc) %in% gene.location$gene_name,]
 ######################################
 
-#加载包
-#####################################
-library(ggplot2)
-library(scales)
-library(jjAnno)
-library(dplyr)
-library(ggalluvial)
-library(patchwork)
-library(Seurat)
-library(data.table)
-library(Matrix)
-library(dendextend)
-library(tidyr)
-library(reshape2)
-library(magrittr)
-library(tidyverse)
-library(viridis)   #色盲色
-library(stringr)
-library(ComplexHeatmap)
-library(circlize)
-library(cluster)
-library(dendsort)
-################################
-library(ggpubr)
-library(limma)
-library(magrittr)
-library(destiny)
-library(factoextra)
-library(FactoMineR)
-###########################################
+
 ###########################
 '%!in%' <- Negate('%in%')   #### Not in function
 #############################]
@@ -199,6 +171,7 @@ colnames(resData) <- c("id","baseMean","log2FC","lfcSE","stat","PValue","FDR")
   options(warn=0)
 }
 # 差异表达分析过程比较慢请耐心等待
+setwd('H:\\Reng\\DEG_analysis')
 twoclassDESeq2(res.path = ".", #所有配对差异表达结果都会输出在res.path路径下
                countsTable = expr[,intersect(colnames(expr),Cluster_meta$samID)],
                prefix = "NPC", #文件名以SKCM开头
