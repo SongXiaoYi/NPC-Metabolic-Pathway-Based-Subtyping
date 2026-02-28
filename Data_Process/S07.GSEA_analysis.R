@@ -36,8 +36,8 @@ library(data.table)
 ###########################
 setwd('H:\\Reng\\DEG_analysis')
 ###########################
-h.gmt <- msigdbr(species = 'human', category = "H") %>%
-            dplyr::select(gs_name, gene_symbol)
+#h.gmt <- msigdbr(species = 'human', category = "H") %>%
+#            dplyr::select(gs_name, gene_symbol)
 #################################### Cluster 1
 Cluster3_DEG <- fread('./NPC_deseq2_test_result.Cluster3_vs_Others.txt')
 
@@ -133,5 +133,34 @@ pdf(file="./Cluster3_INTERFERON_GAMMA.pdf",width= 10,height= 4)
 p1
 dev.off()
 
+#################################################
 
 
+set.seed(1234)
+ego_A <- gseGO(geneList     = geneList,
+             OrgDb        = org.Hs.eg.db,
+             ont          = "BP",
+             keyType      = 'SYMBOL',
+             minGSSize    = 10,
+             maxGSSize    = 500,
+             pvalueCutoff = 1,
+             verbose      = FALSE)
+
+gesa_res <- as.data.frame(ego_A@result)
+###############################################
+#gseaplot2(egmt, "HALLMARK_INFLAMMATORY_RESPONSE", color = "firebrick",
+#            rel_heights=c(1, .2, .6), subplots=1:2)
+
+############################################### Inflammatory Res
+p1 <- gseaplot2(ego_A,#数据
+            "GO:0097707",#画哪一列的信号通路
+            #title = "Prion disease",#标题
+            base_size = 15,#字体大小
+            color = "green",#线条的颜色
+            pvalue_table = TRUE,#加不加p值
+            ES_geom="line",subplots=1:2)#是用线，还是用d点
+
+setwd('H:\\Reng\\DEG_analysis')
+pdf(file="./Cluster3_ferroptosis.pdf",width= 10,height= 4)
+p1
+dev.off()
